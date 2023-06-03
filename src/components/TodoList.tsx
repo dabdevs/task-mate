@@ -13,48 +13,55 @@ interface Props {
 const TodoList: React.FC<Props> = ({ todos, setTodos, completedTodos, setCompletedTodos}:Props) => {
   return (
     <div className='container'>
-      {/* <Droppable droppableId='TodosList'>
+      <Droppable droppableId='TodosList'>
         {
-          (provided) => (
-            <div className="todos" ref={provided.innerRef} {...provided.droppableProps}>
-              {todos?.map(todo => (
+          (provided, snapshot) => (
+            <div 
+              className={`todos ${snapshot.isDraggingOver ? "dragactive" : ""}` }
+              ref={provided.innerRef} 
+              {...provided.droppableProps}>
+              <span className="todos__heading">
+                Active Tasks
+              </span>
+              {todos?.map((todo, index) => (
                 <TodoItem
+                  index={index}
                   key={todo.id}
                   todo={todo}
                   todos={todos}
                   setTodos={setTodos}
                 />
               ))}
+              {provided.placeholder}
             </div>
           )
         }
-      </Droppable> */}
-      <div className="todos">
-        <span className="todos__heading">
-          Active Tasks
-        </span>
-        {todos?.map(todo => (
-          <TodoItem
-            key={todo.id}
-            todo={todo}
-            todos={todos}
-            setTodos={setTodos}
-          />
-        ))}
-      </div>
-      <div className="todos remove">
-        <span className="todos__heading">
-          Completed Tasks
-        </span>
-        {todos?.map(todo => (
-          <TodoItem
-            key={todo.id}
-            todo={todo}
-            todos={todos}
-            setTodos={setTodos}
-          />
-        ))}
-      </div>
+      </Droppable>
+
+      <Droppable droppableId='TodosCompleted'>
+        {
+          (provided, snapshot) => (
+            <div 
+              className={`todos remove ${snapshot.isDraggingOver ? "dragacomplete" : ""}`} 
+              ref={provided.innerRef} 
+              {...provided.droppableProps}>
+              <span className="todos__heading">
+                Completed Tasks
+              </span>
+              {completedTodos?.map((todo, index) => (
+                <TodoItem
+                  index={index}
+                  key={todo.id}
+                  todo={todo}
+                  todos={completedTodos}
+                  setTodos={setCompletedTodos}
+                />
+              ))}
+              {provided.placeholder}
+            </div>
+          )
+        }
+      </Droppable>
     </div>
       
   )
